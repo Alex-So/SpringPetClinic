@@ -25,7 +25,11 @@ pipeline {
         }
         stage('Deploy'){
             steps{
-                sh 'java -jar /var/lib/jenkins/workspace/PetClinicDeclaretedPipepline/target/*.jar'
+                script {
+                    // Assuming the workspace inside the Docker container matches Jenkins' default
+                    def jarPath = sh(script: 'ls /var/jenkins_home/workspace/${JOB_NAME}/target/*.jar', returnStdout: true).trim()
+                    sh "java -jar ${jarPath}"
+                }
             }
         }
     }
